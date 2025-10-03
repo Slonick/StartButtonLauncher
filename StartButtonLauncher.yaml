@@ -1,5 +1,11 @@
 AddonId: 'StartButtonLauncher'
 Packages:
+  - Version: 0.2
+    RequiredApiVersion: 6.0.0
+    ReleaseDate: 2025-10-03
+    PackageUrl: https://github.com/Slonick/StartButtonLauncher/releases/download/v0.1/StartButtonLauncher.pext
+    Changelog:
+      - Prevent fullscreen launch while a game is running 
   - Version: 0.1
     RequiredApiVersion: 6.0.0
     ReleaseDate: 2025-10-03
