@@ -44,7 +44,7 @@ namespace StartButtonLauncher
 
                     if (isStartPressed && this.PlayniteApi.ApplicationInfo.Mode != ApplicationMode.Fullscreen)
                     {
-                        if (PlayniteApi.Database.Games.All(g => g.IsRunning == false))
+                        if (PlayniteApi.Database.Games.All(g => g.IsRunning == false && g.IsRunning == false))
                         {
                             this.LaunchFullscreen();
                         }
