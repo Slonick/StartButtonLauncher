@@ -1,0 +1,84 @@
+name: Build Playnite Plugin (Beta)
+
+on:
+  release:
+    types: [prereleased]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: microsoft/setup-msbuild@v2
+      - uses: NuGet/setup-nuget@v2
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/packages.config', '**/*.csproj') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore NuGet packages
+        run: nuget restore StartButtonLauncher.sln
+
+      - name: Build (Release)
+        run: msbuild StartButtonLauncher.sln /p:Configuration=Release /p:OutputPath="publish"
+      
+      - name: Clean up SDK files
+        shell: pwsh
+        run: Remove-Item publish\Playnite.* -Force -ErrorAction SilentlyContinue
+
+      - name: Upload publish artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-build
+          path: publish/**
+
+  compress:
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: plugin-build
+          path: dist
+
+      - name: Get short commit hash
+        id: vars
+        run: echo "sha_short=${{ github.sha::0:7 }}" >> $env:GITHUB_OUTPUT
+
+      - name: Compress to .pext
+        run: |
+          powershell Compress-Archive -Path dist\* -DestinationPath StartButtonLauncher-beta.zip
+          ren StartButtonLauncher-beta.zip StartButtonLauncher-beta-${{ steps.vars.outputs.sha_short }}.pext
+
+      - name: Upload compressed .pext artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: StartButtonLauncher-pext
+          path: StartButtonLauncher-beta-*.pext
+
+  upload:
+    runs-on: windows-latest
+    needs: compress
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download .pext artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: StartButtonLauncher-pext
+          path: .
+
+      - name: Upload .pext to Pre-Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: StartButtonLauncher-beta-*.pext
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
