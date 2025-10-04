@@ -87,14 +87,8 @@ namespace StartButtonLauncher
                     {
                         if (this.PlayniteApi.Database.Games.All(g => !g.IsRunning && !g.IsLaunching))
                         {
-                            if (WindowHelper.IsWindowVisible(PlayniteTitle))
-                            {
-                                this.LaunchPlaynite(true);
-                            }
-                            else
-                            {
-                                WindowHelper.ShowWindow(PlayniteTitle);
-                            }
+
+                            this.LaunchPlaynite(WindowHelper.IsWindowVisible(PlayniteTitle));
                         }
                     }
 
