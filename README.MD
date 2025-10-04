@@ -1,6 +1,6 @@
 ﻿# StartButtonLauncher (Playnite Plugin)
 
-🎮 **StartButtonLauncher** is a [Playnite](https://playnite.link/) plugin that allows you to launch **Fullscreen mode** by pressing the **Start button** (or another mapped button) on your gamepad.
+🎮 **StartButtonLauncher** is a [Playnite](https://playnite.link/) plugin that allows you to launch **Fullscreen mode** by pressing the **Start button** on your gamepad.
 
 ## ✨ Features
 - Detects the **Start** button press on XInput-compatible gamepads.
