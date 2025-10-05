@@ -27,7 +27,7 @@ jobs:
 
       - name: Build (Release)
         run: msbuild StartButtonLauncher.sln /p:Configuration=Release /p:OutputPath=publish\
-      
+
       - name: Clean up SDK files
         shell: pwsh
         run: |

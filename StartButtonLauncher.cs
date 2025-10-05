@@ -42,24 +42,26 @@ namespace StartButtonLauncher
 
                 if (!File.Exists(fullscreenExe))
                 {
-                    this.PlayniteApi.Notifications.Add(new NotificationMessage(
-                                                                               "executable_not_found",
-                                                                               $"Executable not found: {fullscreenExe}",
-                                                                               NotificationType.Error));
+                    this.PlayniteApi.Notifications.Add(
+                        new NotificationMessage(
+                            "executable_not_found",
+                            $"Executable not found: {fullscreenExe}",
+                            NotificationType.Error));
+
                     return;
                 }
 
-                var argumanets = new List<string> { "--hidesplashscreen" };
+                var arguments = new List<string> { "--hidesplashscreen" };
 
                 if (fullscreen)
                 {
-                    argumanets.Add("--startfullscreen");
+                    arguments.Add("--startfullscreen");
                 }
 
                 var psi = new ProcessStartInfo
                 {
                     FileName = fullscreenExe,
-                    Arguments = string.Join(" ", argumanets),
+                    Arguments = string.Join(" ", arguments),
                     UseShellExecute = false,
                     WorkingDirectory = this.PlayniteApi.Paths.ApplicationPath
                 };
@@ -68,10 +70,11 @@ namespace StartButtonLauncher
             }
             catch (Exception ex)
             {
-                this.PlayniteApi.Notifications.Add(new NotificationMessage(
-                                                                           "executable_launch_error",
-                                                                           $"Error launching executable: {ex.Message}",
-                                                                           NotificationType.Error));
+                this.PlayniteApi.Notifications.Add(
+                    new NotificationMessage(
+                        "executable_launch_error",
+                        $"Error launching executable: {ex.Message}",
+                        NotificationType.Error));
             }
         }
 
