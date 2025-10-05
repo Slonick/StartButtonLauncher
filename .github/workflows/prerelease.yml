@@ -50,7 +50,11 @@ jobs:
 
       - name: Get short commit hash
         id: vars
-        run: echo "sha_short=${{ github.sha::0:7 }}" >> $env:GITHUB_OUTPUT
+        shell: pwsh
+        run: |
+          $sha = "${{ github.sha }}"
+          $sha_short = $sha.Substring(0,7)
+          echo "sha_short=$sha_short" >> $env:GITHUB_OUTPUT
 
       - name: Compress to .pext
         run: |
