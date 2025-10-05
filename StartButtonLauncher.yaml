@@ -1,4 +1,4 @@
-AddonId: 'StartButtonLauncher'
+AddonId: "StartButtonLauncher"
 Packages:
   - Version: 0.3
     RequiredApiVersion: 6.0.0
@@ -17,4 +17,4 @@ Packages:
     ReleaseDate: 2025-10-03
     PackageUrl: https://github.com/Slonick/StartButtonLauncher/releases/download/v0.1/StartButtonLauncher.pext
     Changelog:
-      - "Release
+      - "Release"
