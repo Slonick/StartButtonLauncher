@@ -1,11 +1,17 @@
 AddonId: "StartButtonLauncher"
 Packages:
+  - Version: 0.4
+    RequiredApiVersion: 6.0.0
+    ReleaseDate: 2025-10-06
+    PackageUrl: https://github.com/Slonick/StartButtonLauncher/releases/download/v0.4/StartButtonLauncher.pext
+    Changelog:
+      - "Added plugin settings menu"
   - Version: 0.3
     RequiredApiVersion: 6.0.0
     ReleaseDate: 2025-10-05
     PackageUrl: https://github.com/Slonick/StartButtonLauncher/releases/download/v0.3/StartButtonLauncher.pext
     Changelog:
-      - "Start behavior updated: the plugin now brings the Playnite window to the foreground first, then launches Fullscreen."
+      - "Start behavior updated: the plugin now brings the Playnite window to the foreground first, then launches Fullscreen"
   - Version: 0.2
     RequiredApiVersion: 6.0.0
     ReleaseDate: 2025-10-03
