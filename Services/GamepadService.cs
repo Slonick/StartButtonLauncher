@@ -3,23 +3,18 @@ using System.Threading;
 using Playnite.SDK;
 using SDL2;
 
-namespace StartButtonLauncher
+namespace StartButtonLauncher.Services
 {
-    public class GamepadService : IDisposable
+    public class GamepadService
     {
-        private static readonly ILogger Logger = LogManager.GetLogger(nameof(StartButtonLauncher));
-
         public event Action<SDL.SDL_GameControllerButton> ButtonPressed;
         public event Action<SDL.SDL_GameControllerButton> ButtonReleased;
+
+        private static readonly ILogger Logger = LogManager.GetLogger(nameof(StartButtonLauncher));
         private IntPtr controller = IntPtr.Zero;
         private bool running;
 
         private Thread thread;
-
-        public void Dispose()
-        {
-            this.Stop();
-        }
 
         public void Start()
         {

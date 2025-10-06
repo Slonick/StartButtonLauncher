@@ -2,30 +2,47 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Windows.Controls;
 using Playnite.SDK;
 using Playnite.SDK.Events;
 using Playnite.SDK.Plugins;
 using SDL2;
+using StartButtonLauncher.Helpers;
+using StartButtonLauncher.Services;
+using StartButtonLauncher.ViewModels;
+using StartButtonLauncher.Views;
 
 namespace StartButtonLauncher
 {
     public class StartButtonLauncher : GenericPlugin
     {
         private const string PlayniteTitle = "Playnite.DesktopApp";
-        private static readonly ILogger logger = LogManager.GetLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger();
         private readonly GamepadService gamepadService;
+        private readonly StartButtonLauncherSettingsViewModel model;
 
         public StartButtonLauncher(IPlayniteAPI playniteApi) : base(playniteApi)
         {
+            this.model = new StartButtonLauncherSettingsViewModel(this);
+            this.Properties = new GenericPluginProperties
+            {
+                HasSettings = true
+            };
+
             this.gamepadService = new GamepadService();
             this.gamepadService.ButtonPressed += this.OnButtonPressed;
         }
 
         public override Guid Id => Guid.Parse("80e02e7f-57cd-43f0-b501-45d5ce16f10f");
 
+        public override ISettings GetSettings(bool firstRunSettings) => this.model;
+
+        public override UserControl GetSettingsView(bool firstRunSettings)
+            => new StartButtonLauncherSettingsView { DataContext = this.model };
+
         public override void OnApplicationStarted(OnApplicationStartedEventArgs args)
         {
-            logger.Info("StartButtonPlugin started.");
+            Logger.Info("StartButtonPlugin started.");
 
             if (this.PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Fullscreen)
             {
@@ -82,9 +99,10 @@ namespace StartButtonLauncher
 
         private void OnButtonPressed(SDL.SDL_GameControllerButton button)
         {
-            if (button == SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_GUIDE)
+            if (button == this.model.Settings.SelectedButton)
             {
-                this.LaunchPlaynite(WindowHelper.IsWindowVisible(PlayniteTitle));
+                var isFullscreen = !this.model.Settings.FocusBeforeFullscreen || WindowHelper.IsWindowVisible(PlayniteTitle);
+                this.LaunchPlaynite(isFullscreen);
             }
         }
     }
