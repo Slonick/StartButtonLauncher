@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Playnite.SDK;
 using Playnite.SDK.Events;
 using Playnite.SDK.Plugins;
+using SDL2;
 
 namespace StartButtonLauncher
 {
@@ -15,23 +13,31 @@ namespace StartButtonLauncher
     {
         private const string PlayniteTitle = "Playnite.DesktopApp";
         private static readonly ILogger logger = LogManager.GetLogger();
-        private CancellationTokenSource cts;
-        private bool wasStartPressed;
+        private readonly GamepadService gamepadService;
 
-        public StartButtonLauncher(IPlayniteAPI playniteAPI) : base(playniteAPI) { }
+        public StartButtonLauncher(IPlayniteAPI playniteApi) : base(playniteApi)
+        {
+            this.gamepadService = new GamepadService();
+            this.gamepadService.ButtonPressed += this.OnButtonPressed;
+        }
 
         public override Guid Id => Guid.Parse("80e02e7f-57cd-43f0-b501-45d5ce16f10f");
 
         public override void OnApplicationStarted(OnApplicationStartedEventArgs args)
         {
             logger.Info("StartButtonPlugin started.");
-            this.cts = new CancellationTokenSource();
-            Task.Run(() => this.PollGamepad(this.cts.Token));
+
+            if (this.PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Fullscreen)
+            {
+                return;
+            }
+
+            this.gamepadService.Start();
         }
 
         public override void OnApplicationStopped(OnApplicationStoppedEventArgs args)
         {
-            this.cts?.Cancel();
+            this.gamepadService.Stop();
         }
 
         private void LaunchPlaynite(bool fullscreen)
@@ -42,11 +48,9 @@ namespace StartButtonLauncher
 
                 if (!File.Exists(fullscreenExe))
                 {
-                    this.PlayniteApi.Notifications.Add(
-                        new NotificationMessage(
-                            "executable_not_found",
-                            $"Executable not found: {fullscreenExe}",
-                            NotificationType.Error));
+                    this.PlayniteApi.Notifications.Add(new NotificationMessage("executable_not_found",
+                                                                               $"Executable not found: {fullscreenExe}",
+                                                                               NotificationType.Error));
 
                     return;
                 }
@@ -70,35 +74,17 @@ namespace StartButtonLauncher
             }
             catch (Exception ex)
             {
-                this.PlayniteApi.Notifications.Add(
-                    new NotificationMessage(
-                        "executable_launch_error",
-                        $"Error launching executable: {ex.Message}",
-                        NotificationType.Error));
+                this.PlayniteApi.Notifications.Add(new NotificationMessage("executable_launch_error",
+                                                                           $"Error launching executable: {ex.Message}",
+                                                                           NotificationType.Error));
             }
         }
 
-        private async Task PollGamepad(CancellationToken token)
+        private void OnButtonPressed(SDL.SDL_GameControllerButton button)
         {
-            while (!token.IsCancellationRequested)
+            if (button == SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_GUIDE)
             {
-                if (XInput.GetState(0, out var state))
-                {
-                    var isStartPressed = state.Gamepad.wButtons.HasFlag(XInputButtons.Start);
-
-                    if (isStartPressed && !this.wasStartPressed && this.PlayniteApi.ApplicationInfo.Mode != ApplicationMode.Fullscreen)
-                    {
-                        if (this.PlayniteApi.Database.Games.All(g => !g.IsRunning && !g.IsLaunching))
-                        {
-
-                            this.LaunchPlaynite(WindowHelper.IsWindowVisible(PlayniteTitle));
-                        }
-                    }
-
-                    this.wasStartPressed = isStartPressed;
-                }
-
-                await Task.Delay(100, token).ConfigureAwait(false);
+                this.LaunchPlaynite(WindowHelper.IsWindowVisible(PlayniteTitle));
             }
         }
     }
