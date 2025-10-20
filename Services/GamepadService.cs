@@ -15,6 +15,7 @@ namespace StartButtonLauncher.Services
         private bool running;
 
         private Thread thread;
+        public bool IsSuspended { get; set; }
 
         public void Start()
         {
@@ -77,13 +78,13 @@ namespace StartButtonLauncher.Services
 
                             case SDL.SDL_EventType.SDL_CONTROLLERBUTTONDOWN:
                                 var pressed = (SDL.SDL_GameControllerButton)e.cbutton.button;
-                                Logger.Debug($"Button down: {pressed}");
+                                //Logger.Debug($"Button down: {pressed}");
                                 this.ButtonPressed?.Invoke(pressed);
                                 break;
 
                             case SDL.SDL_EventType.SDL_CONTROLLERBUTTONUP:
                                 var released = (SDL.SDL_GameControllerButton)e.cbutton.button;
-                                Logger.Debug($"Button up: {released}");
+                                //Logger.Debug($"Button up: {released}");
                                 this.ButtonReleased?.Invoke(released);
                                 break;
                         }

@@ -23,14 +23,14 @@ namespace StartButtonLauncher
 
         public StartButtonLauncher(IPlayniteAPI playniteApi) : base(playniteApi)
         {
-            this.model = new StartButtonLauncherSettingsViewModel(this);
+            this.gamepadService = new GamepadService();
+            this.gamepadService.ButtonPressed += this.OnButtonPressed;
+
+            this.model = new StartButtonLauncherSettingsViewModel(this, this.gamepadService);
             this.Properties = new GenericPluginProperties
             {
                 HasSettings = true
             };
-
-            this.gamepadService = new GamepadService();
-            this.gamepadService.ButtonPressed += this.OnButtonPressed;
         }
 
         public override Guid Id => Guid.Parse("80e02e7f-57cd-43f0-b501-45d5ce16f10f");
@@ -99,7 +99,7 @@ namespace StartButtonLauncher
 
         private void OnButtonPressed(SDL.SDL_GameControllerButton button)
         {
-            if (button == this.model.Settings.SelectedButton)
+            if (!this.gamepadService.IsSuspended && button == this.model.Settings.SelectedButton)
             {
                 var isFullscreen = !this.model.Settings.FocusBeforeFullscreen || WindowHelper.IsWindowVisible(PlayniteTitle);
                 this.LaunchPlaynite(isFullscreen);

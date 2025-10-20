@@ -13,9 +13,7 @@ namespace StartButtonLauncher.Helpers
             new ButtonOption("A", SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_A),
             new ButtonOption("B", SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_B),
             new ButtonOption("X", SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X),
-            new ButtonOption("Y", SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_Y),
-            new ButtonOption("Left Bumper (LB)", SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_LEFTSHOULDER),
-            new ButtonOption("Right Bumper (RB)", SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)
+            new ButtonOption("Y", SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_Y)
         };
     }
 
