@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="StartButtonLauncher.Views.StartButtonLauncherSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:StartButtonLauncher.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:helpers="clr-namespace:StartButtonLauncher.Helpers"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:StartButtonLauncher.ViewModels"
+             d:DataContext="{d:DesignInstance viewModels:StartButtonLauncherSettingsViewModel}"
+             mc:Ignorable="d">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Margin="0,0,0,10"
+                   FontWeight="Bold"
+                   Foreground="{DynamicResource TextBrush}"
+                   Text="{DynamicResource LOCStartButtonLauncherSelectButton}" />
+
+        <ComboBox Grid.Row="1"
+                  Margin="0,0,0,5"
+                  Background="{DynamicResource ControlBackgroundBrush}"
+                  BorderBrush="{DynamicResource NormalBorderBrush}"
+                  DisplayMemberPath="Label"
+                  Foreground="{DynamicResource TextBrush}"
+                  ItemsSource="{Binding Source={x:Static helpers:ButtonOptions.All}}"
+                  SelectedValue="{Binding Settings.SelectedButton, Mode=TwoWay}"
+                  SelectedValuePath="Value" />
+
+        <TextBlock Grid.Row="2"
+                   Margin="0,0,0,15"
+                   FontSize="12"
+                   Foreground="{DynamicResource TextBrushDarker}"
+                   Text="{DynamicResource LOCStartButtonLauncherGuideWarning}"
+                   TextWrapping="Wrap" />
+
+        <CheckBox Grid.Row="3"
+                  Margin="0,0,0,20"
+                  Foreground="{DynamicResource TextBrush}"
+                  IsChecked="{Binding Settings.FocusBeforeFullscreen, Mode=TwoWay}"
+                  ToolTip="{DynamicResource LOCStartButtonLauncherFocusOptionHint}">
+            <TextBlock Text="{DynamicResource LOCStartButtonLauncherFocusOption}" />
+        </CheckBox>
+
+        <TextBlock Grid.Row="4"
+                   Margin="0,0,0,5"
+                   FontWeight="Bold"
+                   Foreground="{DynamicResource TextBrush}"
+                   Text="{DynamicResource LOCStartButtonLauncherLogTitle}" />
+
+        <ListBox Grid.Row="5"
+                 Padding="5"
+                 Background="{DynamicResource GridItemBackgroundBrush}"
+                 BorderBrush="{DynamicResource NormalBorderBrush}"
+                 BorderThickness="1"
+                 FontFamily="Consolas"
+                 Foreground="{DynamicResource TextBrush}"
+                 ItemsSource="{Binding ButtonLogs}"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <Run Foreground="{DynamicResource TextBrushDarker}" Text="{DynamicResource LOCStartButtonLauncherLogButtonPressed}" />
+                        <Run Text="{Binding Path=., Converter={converters:SdlButtonToStringConverter}}" />
+                    </TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </Grid>
+</UserControl>

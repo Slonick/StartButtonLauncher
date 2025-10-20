@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace StartButtonLauncher
+namespace StartButtonLauncher.Helpers
 {
     public static class WindowHelper
     {

@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="LOCStartButtonLauncherSelectButton">
+        Sélectionnez un bouton pour lancer Playnite en mode plein écran :
+    </system:String>
+    <system:String x:Key="LOCStartButtonLauncherGuideWarning">
+        Remarque : le bouton Guide n’est pas toujours détecté. Veuillez vérifier s’il fonctionne avec votre manette.
+    </system:String>
+    <system:String x:Key="LOCStartButtonLauncherFocusOption">
+        Mettre Playnite au premier plan avant le plein écran
+    </system:String>
+    <system:String x:Key="LOCStartButtonLauncherFocusOptionHint">
+        Si activé, Playnite Desktop sera mis au premier plan avant de passer en mode plein écran.
+    </system:String>
+    <system:String x:Key="LOCStartButtonLauncherLogTitle">
+        Test des entrées de boutons :
+    </system:String>
+    <system:String x:Key="LOCStartButtonLauncherLogButtonPressed">
+        Bouton pressé :
+    </system:String>
+
+</ResourceDictionary>
