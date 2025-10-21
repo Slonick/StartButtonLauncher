@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows.Controls;
 using Playnite.SDK;
 using Playnite.SDK.Events;
@@ -99,7 +100,8 @@ namespace StartButtonLauncher
 
         private void OnButtonPressed(SDL.SDL_GameControllerButton button)
         {
-            if (!this.gamepadService.IsSuspended && button == this.model.Settings.SelectedButton)
+            var gameOpened = this.PlayniteApi.Database.Games.Any(g => g.IsLaunching || g.IsRunning);
+            if (!gameOpened && !this.gamepadService.IsSuspended && button == this.model.Settings.SelectedButton)
             {
                 var isFullscreen = !this.model.Settings.FocusBeforeFullscreen || WindowHelper.IsWindowVisible(PlayniteTitle);
                 this.LaunchPlaynite(isFullscreen);
