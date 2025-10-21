@@ -42,6 +42,9 @@ Thanks to SDL2, this plugin supports a wide variety of gamepads including:
 
 ## 📝 Changelog
 
+### Version 0.5.0
+- Prevent open fullscreen while a game is running 
+
 ### Version 0.4.0+
 - Replaced XInput with SDL2 for broader gamepad compatibility
 - Added configurable button selection
